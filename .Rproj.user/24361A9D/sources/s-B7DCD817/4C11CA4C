@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1573206821754.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4C11CA4C",
+    "lastKnownWriteTime" : 1573249156,
+    "last_content_update" : 1573249156464,
+    "path" : "G:/VCHDecisionSupport/Coastal_Richmond_SI/2019-11-07_vch_confidence-intervals-for-chronic-disease-dasbhoard/src/2019-11-07_vch_confidence-intervals-for-multi-site-dashboard-chronic-disease-population.R",
+    "project_path" : "src/2019-11-07_vch_confidence-intervals-for-multi-site-dashboard-chronic-disease-population.R",
+    "properties" : {
+        "cursorPosition" : "124,26",
+        "scrollLine" : "117",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

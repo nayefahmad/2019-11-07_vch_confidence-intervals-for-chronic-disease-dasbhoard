@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1573247274222.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "44AED896",
+    "lastKnownWriteTime" : 1573247336,
+    "last_content_update" : 1573247336544,
+    "path" : "G:/VCHDecisionSupport/Coastal_Richmond_SI/2019-11-07_vch_confidence-intervals-for-chronic-disease-dasbhoard/src/test.Rmd",
+    "project_path" : "src/test.Rmd",
+    "properties" : {
+        "cursorPosition" : "26,18",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
