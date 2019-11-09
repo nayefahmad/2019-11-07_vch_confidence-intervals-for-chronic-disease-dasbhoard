@@ -42,8 +42,8 @@ ci_function <- function(df,
 
 #*********************************************************
 # fn test: 
-ci_function(df = df2.nest$data[1], 
-            response_col = y_deaths) 
-
-ci_function(df = df2.nest$data[1], 
-            response_col = y_discharges) 
+# ci_function(df = df2.nest$data[1], 
+#             response_col = y_deaths) 
+# 
+# ci_function(df = df2.nest$data[1], 
+#             response_col = y_discharges) 

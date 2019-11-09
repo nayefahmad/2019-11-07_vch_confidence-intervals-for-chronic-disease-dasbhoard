@@ -42,6 +42,7 @@ library(kableExtra)
 #' 
 
 # paste data using {datapasta} add-in 
+# Data ----------
 df1.test_discharges <- 
   tibble::tribble(
       ~fyear, ~quarter, ~is_q4, ~site, ~total_discharges, ~alos_days, ~total_deaths,
@@ -95,6 +96,7 @@ df1.test_discharges %>%
 #' ## Total deaths vs quarter 
 #'  
 
+# Models ------
 m1.deaths <- lm(total_deaths ~ quarter, 
                 data = df1.test_discharges)
 
