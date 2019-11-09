@@ -1,6 +1,6 @@
 
 #'--- 
-#' title: "CI for average deaths per quarter at a hospital"
+#' title: "Confidence intervals for average deaths per quarter "
 #' author: "Nayef Ahmad"
 #' date: "2019-11-07"
 #' output: 
@@ -19,13 +19,29 @@ library(tidyverse)
 library(Hmisc)
 library(broom)
 library(DT)
+library(kableExtra)
 
 #+ data
 #' # Data 
 #' 
-#' This is dummy data.  
+#' This is dummy data. 
+#' 
+#' Let's say we're looking at the total deaths by quarter at a large hospital. 
 #' 
 
+#' The question we're interested in is whether there are meaningful differences
+#' across quarters. For instance, anecdotal evidence indicates that deaths often
+#' rise in the 4th quarter of the year.
+#'
+#' We also want to set standards for what to expect in future quarters. If there
+#' are no longer-term trends over time, then the confidence interval for Q1 that
+#' we establish from the historical data can be used to indicate wheter the next
+#' Q1 has a higher/lower than expected number of deaths.
+#' 
+#' Here's what the data looks like: 
+#' 
+
+# paste data using {datapasta} add-in 
 df1.test_discharges <- 
   tibble::tribble(
       ~fyear, ~quarter, ~is_q4, ~site, ~total_discharges, ~alos_days, ~total_deaths,
@@ -87,11 +103,11 @@ summary(m1.deaths)
 #' **Note that the F-stat is not significant. This model may not be useful.**
 #'  
 
-m1.deaths %>% 
-  tidy() %>% 
-  datatable(extensions = 'Buttons',
-            options = list(dom = 'Bfrtip', 
-                           buttons = c('excel', "csv")))
+# m1.deaths %>% 
+#   tidy() %>% 
+#   datatable(extensions = 'Buttons',
+#             options = list(dom = 'Bfrtip', 
+#                            buttons = c('excel', "csv")))
 
 #' ### Confidence intervals 
 #' 
@@ -115,10 +131,11 @@ df2.nested %>%
   unnest(conf) %>% 
   select(quarter, 
          lwr_death:upr_death) %>% 
-  datatable(extensions = 'Buttons',
-            options = list(dom = 'Bfrtip', 
-                           buttons = c('excel', "csv")))
-                           
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped",
+                                      "condensed", 
+                                      "responsive"))
+
 
 
 df1.test_discharges %>% 
@@ -138,7 +155,7 @@ df1.test_discharges %>%
   theme(panel.grid.minor = element_line(colour = "grey95"), 
         panel.grid.major = element_line(colour = "grey95"))
 
-#' ** Q. Are shorter CIs necessarily better?**
+#' **Q. Are shorter CIs necessarily better?**
 #'
 #' **Ans.** No. See [Hesterberg, 2015](https://arxiv.org/abs/1411.5279):
 #'
@@ -146,6 +163,7 @@ df1.test_discharges %>%
 #' percentile CIs is less accurate than using t-intervals for small
 #' samples, though more accurate for larger samples." 
 #' 
+#' > "(In small samples) bootsrap distributions tend to be too narrow on average ... "
 #' 
 
 #' ## Total deaths vs is_q4
@@ -156,11 +174,11 @@ m2.deaths <- lm(total_deaths ~ is_q4,
 
 summary(m2.deaths)
 
-m2.deaths %>% 
-  tidy() %>% 
-  datatable(extensions = 'Buttons',
-            options = list(dom = 'Bfrtip', 
-                           buttons = c('excel', "csv")))
+# m2.deaths %>% 
+#   tidy() %>% 
+#   datatable(extensions = 'Buttons',
+#             options = list(dom = 'Bfrtip', 
+#                            buttons = c('excel', "csv")))
 
 #' ### Confidence intervals 
 #' 
@@ -184,9 +202,11 @@ df2.nested %>%
   unnest(conf) %>% 
   select(is_q4, 
          lwr_death:upr_death) %>% 
-  datatable(extensions = 'Buttons',
-            options = list(dom = 'Bfrtip', 
-                           buttons = c('excel', "csv")))
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped",
+              "condensed", 
+              "responsive"))
+            
 
 
 
