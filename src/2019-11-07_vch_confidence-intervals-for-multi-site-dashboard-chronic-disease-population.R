@@ -1,6 +1,6 @@
 
 #'--- 
-#' title: "CI for multi-site chronic disease dashboard"
+#' title: "CI for average deaths per quarter at a hospital"
 #' author: "Nayef Ahmad"
 #' date: "2019-11-07"
 #' output: 
@@ -23,7 +23,7 @@ library(DT)
 #+ data
 #' # Data 
 #' 
-#' Play with test data 
+#' This is dummy data.  
 #' 
 
 df1.test_discharges <- 
@@ -55,20 +55,20 @@ df1.test_discharges <-
 # str(df1.test_discharges)
 # summary(df1.test_discharges)
 
-# df1.test_discharges %>% 
-#   datatable(extensions = 'Buttons',
-#           options = list(dom = 'Bfrtip', 
-#                          buttons = c('excel', "csv")))
-#                          
+df1.test_discharges %>%
+  datatable(extensions = 'Buttons',
+          options = list(dom = 'Bfrtip',
+                         buttons = c('excel', "csv")))
 
-# df1.test_discharges %>% 
+
+# df1.test_discharges %>%
 #   ggplot(aes(x = total_deaths)) +
 #   geom_density()
-#   
-# df1.test_discharges %>% 
+#    
+# df1.test_discharges %>%
 #   ggplot(aes(x = alos_days)) +
 #   geom_density()
-# 
+#  
 # df1.test_discharges %>% 
 #   ggplot(aes(x = total_discharges)) +
 #   geom_density()
@@ -138,7 +138,15 @@ df1.test_discharges %>%
   theme(panel.grid.minor = element_line(colour = "grey95"), 
         panel.grid.major = element_line(colour = "grey95"))
 
-
+#' ** Q. Are shorter CIs necessarily better?**
+#'
+#' **Ans.** No. See [Hesterberg, 2015](https://arxiv.org/abs/1411.5279):
+#'
+#' > "...the common combination of nonparametric bootstrapping and bootstrap
+#' percentile CIs is less accurate than using t-intervals for small
+#' samples, though more accurate for larger samples." 
+#' 
+#' 
 
 #' ## Total deaths vs is_q4
 #' 
