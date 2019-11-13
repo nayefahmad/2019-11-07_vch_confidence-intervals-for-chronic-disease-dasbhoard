@@ -307,6 +307,13 @@ tidy(m3.deaths_lasso) %>%
 
 #' Note how similar these results are to those of the first model we fit, `m1.deaths`
 
+#' \  
+#' \  
+#' 
+#' Finally, just to test, let's fit the model with only 1 coefficient: 
+#' 
+#' 
+
 # Fit the final model with 1 coeffs:  
 m4.deaths_lasso <- glmnet(x, y, lambda = cv.lasso$lambda.1se)
 coef(m4.deaths_lasso)
