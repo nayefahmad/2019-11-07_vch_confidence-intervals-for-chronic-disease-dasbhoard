@@ -235,8 +235,8 @@ df1.test_discharges %>%
 #'
 #' Previous models show that not every level of the `quarter` variable is likely
 #' to have a significant coefficient. We could manually try to find which levels
-#' to include, but that doesn't scale - what if we need to do this for dozens of
-#' different patient groups?
+#' to include (as we did in model `m2.deaths`), but that doesn't scale - what if
+#' we need to do this for dozens of different patient groups?
 #' 
 #' Instead, let's try automated variable selection with LASSO. See [here for more on this](http://www.sthda.com/english/articles/36-classification-methods-essentials/149-penalized-logistic-regression-essentials-in-r-ridge-lasso-and-elastic-net/). 
 #' 
@@ -248,6 +248,8 @@ df1.test_discharges %>%
 #' `?cv.glmnet`: "Does k-fold cross-validation for glmnet, produces a plot, and
 #' returns a value for lambda (and gamma if relax=TRUE)"
 #'
+#' \  
+#'  
 #' Well start with cross-validation to select a value for lambda. (In actual
 #' analysis, we would do this on training dataset, not the full dataset.)
 #' 
@@ -267,10 +269,24 @@ y <- df1.test_discharges$total_deaths
 set.seed(123) 
 cv.lasso <- cv.glmnet(x, y)
 
-#' Results of cross-validation: 
+#' ### Results of cross-validation: 
+#' 
 
 cv.lasso
 
+plot(cv.lasso)
+
+#' [Reference for this plot](https://www.jstatsoft.org/v33/i01/)
+#'
+#' > We show the mean cross-validated error curve, as well as a
+#' one-standard-deviation band. In this figure the left vertical line
+#' corresponds to the minimum error, while the right vertical line the largest
+#' value of lambda such that the error is within one standard-error of the
+#' minimum|the so called "one-standard-error" rule.
+#' 
+
+#' ### Interpreting CV results 
+#' 
 #' If we use `cv.lasso$lambda.min`, there will be 2 nonzero coefficients. If we
 #' use `cv.lasso$lambda.1se`, there will be only 1 nonzero coefficient.
 #' 
@@ -302,9 +318,10 @@ tidy(m4.deaths_lasso) %>%
                                       "responsive"))
 
 #' In this case, results are quite different from previous models. Might be best to 
-#' stick with using `lambda.min`. 
+#' stick with using `lambda.min` (refer to the plot above). 
 #' 
 #' **Overall, using LASSO for this purpose seems very promising**. 
+#' 
 
 
 
