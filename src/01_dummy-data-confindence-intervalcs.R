@@ -20,6 +20,7 @@ library(Hmisc)
 library(broom)
 library(DT)
 library(kableExtra)
+library(glmnet)
 
 #+ data
 #' # Data 
@@ -228,6 +229,91 @@ df1.test_discharges %>%
   theme_light() +
   theme(panel.grid.minor = element_line(colour = "grey95"), 
         panel.grid.major = element_line(colour = "grey95"))
+
+
+#' ## LASSO variable selection
+#'
+#' Previous models show that not every level of the `quarter` variable is likely
+#' to have a significant coefficient. We could manually try to find which levels
+#' to include, but that doesn't scale - what if we need to do this for dozens of
+#' different patient groups?
+#' 
+#' Instead, let's try automated variable selection with LASSO. See [here for more on this](http://www.sthda.com/english/articles/36-classification-methods-essentials/149-penalized-logistic-regression-essentials-in-r-ridge-lasso-and-elastic-net/). 
+#' 
+#'
+#' `?glmnet`: "Fit a generalized linear model via penalized maximum
+#' likelihood... Fits linear, logistic and multinomial, poisson, and Cox
+#' regression models."
+#'
+#' `?cv.glmnet`: "Does k-fold cross-validation for glmnet, produces a plot, and
+#' returns a value for lambda (and gamma if relax=TRUE)"
+#'
+#' Well start with cross-validation to select a value for lambda. (In actual
+#' analysis, we would do this on training dataset, not the full dataset.)
+#' 
+
+# predictors: 
+x <- model.matrix(total_deaths ~ ., 
+                  data = df1.test_discharges %>% 
+                    select(quarter, 
+                           total_deaths))
+
+# drop the first column of all 1s (glmnet will recreate this)
+x <- x[, -1]
+
+y <- df1.test_discharges$total_deaths
+
+# Find the best lambda using cross-validation
+set.seed(123) 
+cv.lasso <- cv.glmnet(x, y)
+
+#' Results of cross-validation: 
+
+cv.lasso
+
+#' If we use `cv.lasso$lambda.min`, there will be 2 nonzero coefficients. If we
+#' use `cv.lasso$lambda.1se`, there will be only 1 nonzero coefficient.
+#' 
+
+#' Now we fit final models with the values of `lambda` that we got from cross-validation. 
+#' 
+
+# Fit the final model with 2 coeffs:  
+m3.deaths_lasso <- glmnet(x, y, lambda = cv.lasso$lambda.min)
+coef(m3.deaths_lasso)
+
+tidy(m3.deaths_lasso) %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped",
+                "condensed", 
+                "responsive"))
+              
+
+#' Note how similar these results are to those of the first model we fit, `m1.deaths`
+
+# Fit the final model with 1 coeffs:  
+m4.deaths_lasso <- glmnet(x, y, lambda = cv.lasso$lambda.1se)
+coef(m4.deaths_lasso)
+
+tidy(m4.deaths_lasso) %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped",
+                                      "condensed", 
+                                      "responsive"))
+
+#' In this case, results are quite different from previous models. Might be best to 
+#' stick with using `lambda.min`. 
+#' 
+#' **Overall, using LASSO for this purpose seems very promising**. 
+
+
+
+
+
+
+
+
+
 
 
 
